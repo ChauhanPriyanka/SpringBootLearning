@@ -1,0 +1,60 @@
+﻿Desktop Docker:
+* Enable Virtualization from BIOS
+* Windows Home does not support Docker Desktop
+   * Followed following link to install HyperV pkg and containerization in Windows home , Hyper-V setting and InstallContainers.bat
+   * Change registry EditionId Professional. HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\EditionId 
+   * Restart
+   * Enable Hyper-V feature from windows on and off features.
+   * bcdedit set hypervisorlauncedtype = off
+   * Change from settings to Windows Container
+   * Windows could not run linux teminal, so need to use the windows command promt.
+
+
+After installing docker you can run the desktop docker terminal.
+
+
+To create image of spring boot application using Docker desktop
+* Create a DockerFile in spring boot application
+* This Docker file will contain  From, ADD, ENTRYPOINT values.
+* Create Maven build to create jar of spring boot application
+* In the cuurent project directory where target file is present
+   * docker build -f Dockerfile -t [springbootapplicationName] .
+* docker images //this will list all the images
+   * docker run -p 8085:8085 [springbootapplicationName]
+   * This will start the spring boot application in a container
+   * Now you can access the webapplication from your laptop
+* Create an account in Destop Docker and create a private repository.
+* push the newly created image in private repository
+   * login to docker hub from windows command promt terminal
+   * docker login //this will use the same credential, which were used in desktop docker UI login
+   * push [imagename] : tag //multiple ways to push
+
+
+Kubernetes on MiniKube
+* Install oracle virtual box
+* Download kubectl.exe
+* Download minikube_amd64.exe from kubernetes.io // rename it to minikube.exe
+* keep both of the above setup in c drive c: Kubernetes
+* Turn off the hyper-V feature., else it will not installl the minikube
+* go to cmd promt type minikube.exe start 
+* Minikube will get installed in Virtual box.
+* type username docker and password = tcuser
+
+
+
+
+
+
+
+
+
+
+
+
+//InstallContainer..bat content
+pushd "%~dp0"
+dir /b %SystemRoot%\servicing\Packages\*containers*.mum >containers.txt
+for /f %%i in ('findstr /i . containers.txt 2^>nul') do dism /online /norestart /add-package:"%SystemRoot%\servicing\Packages\%%i"
+del containers.txt
+dism /online /enable-feature /featurename:Containers -All /LimitAccess /ALL
+pause
